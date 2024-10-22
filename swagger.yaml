@@ -1,0 +1,200 @@
+openapi: 3.0.0
+info:
+  title: API de Usuários
+  version: 1.0.0
+  description: API para gerenciamento de usuários com autenticação JWT.
+  
+servers:
+  - url: http://localhost:5000/api
+    description: Servidor local
+
+paths:
+  /users:
+    post:
+      summary: Criação de usuário
+      description: Cria um novo usuário.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateSchema'
+      responses:
+        '201':
+          description: Usuário criado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSchema'
+        '400':
+          description: Email já está em uso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Email already in use
+
+  /token:
+    post:
+      summary: Geração de Token JWT
+      description: Gera um token JWT para o usuário autenticado.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: admin@admin.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        '200':
+          description: Token JWT gerado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  token_type:
+                    type: string
+                    example: bearer
+        '400':
+          description: Requisição inválida (JSON esperado).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Invalid request, JSON data expected
+        '401':
+          description: Credenciais inválidas.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Invalid Credentials
+
+  /users/me:
+    get:
+      summary: Informações do usuário atual
+      description: Obtém as informações do usuário autenticado.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Informações do usuário autenticado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSchema'
+        '404':
+          description: Usuário não encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: User not found
+        '401':
+          description: Token JWT inválido ou ausente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Missing Authorization Header
+
+  /logout:
+    post:
+      summary: Efetua o logout e revoga o token JWT
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Logout realizado com sucesso. O token foi revogado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: "Logout realizado com sucesso. Token revogado."
+        "401":
+          description: Token inválido ou não fornecido
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserCreateSchema:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: john.doe@example.com
+        date_of_birth:
+          type: string
+          format: date
+          example: 1990-01-01
+        password:
+          type: string
+          example: password123
+
+    UserSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: john.doe@example.com
+        date_of_birth:
+          type: string
+          format: date
+          example: 1990-01-01
+        date_created:
+          type: string
+          format: date-time
+          example: 2024-10-19T16:17:00Z
+        date_last_updated:
+          type: string
+          format: date-time
+          example: 2024-10-19T16:17:00Z

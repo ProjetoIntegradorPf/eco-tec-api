@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    container_name: eco-tec-api
+    environment:
+      POSTGRES_USER: eco-tec-api-user      # Usuário do PostgreSQL
+      POSTGRES_PASSWORD: password  # Senha do PostgreSQL
+      POSTGRES_DB: eco-tec-api-user  # Nome do banco de dados
+    ports:
+      - "5439:5432"  # Mapeia a porta 5432 para o host
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # Persistência de dados
+
+volumes:
+  pgdata:
+    driver: local  # Volume para persistir os dados do PostgreSQL
