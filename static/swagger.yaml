@@ -51,7 +51,7 @@ paths:
                 username:
                   type: string
                   example: admin@admin.com
-                password:
+                hashed_password:
                   type: string
                   example: password123
       responses:
@@ -166,7 +166,7 @@ components:
           type: string
           format: date
           example: 1990-01-01
-        password:
+        hashed_password:
           type: string
           example: password123
 

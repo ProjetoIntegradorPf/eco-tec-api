@@ -9,7 +9,7 @@ from passlib.hash import bcrypt  # Importando bcrypt corretamente do passlib
 class UserModel(Base):
     __tablename__ = 'users'  # Certifique-se de que o nome da tabela está correto
 
-    id = Column(primary_key=True, default=uuid.uuid4, index=True, unique=True)  # UUID como id
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     first_name = Column(String, index=True)
     last_name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
