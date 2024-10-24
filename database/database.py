@@ -19,13 +19,8 @@ def create_database():
     from models.financial_report_model import FinancialReportModel
     from models.castration_model import CastrationModel
     from models.sale_model import SaleModel
-    print("Tentando criar tabelas...")
     
-    # Print para verificar quais tabelas SQLAlchemy conhece
-    print("Tabelas registradas:", Base.metadata.tables.keys())
-
     Base.metadata.create_all(bind=engine)
-    print("Tabelas criadas com sucesso!")
 
 
 

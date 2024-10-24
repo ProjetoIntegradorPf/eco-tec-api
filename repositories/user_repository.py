@@ -15,6 +15,4 @@ def get_user_by_email(db: Session, email: str):
     Busca um usuário pelo email.
     """
 
-    print("buscando o usuário")
-    print(email)
     return db.query(UserModel).filter(UserModel.email == email).first()

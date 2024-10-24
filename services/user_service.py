@@ -21,9 +21,6 @@ def get_user_by_email(email: str, db: orm.Session):
     """
     Busca um usuário pelo e-mail.
     """
-
-    print("buscando o usuário")
-    print(email)
     return user_repository.get_user_by_email(db, email)
 
 
@@ -46,19 +43,10 @@ def authenticate_user(email: str, password: str, db: orm.Session):
     """
     Autentica um usuário baseado no e-mail e senha.
     """
-
-    print("buscando o usuário")
-    print(email)
     user = get_user_by_email(email, db)
-
-    print(user)
 
     if not user:
         return False
-    
-    print("encontrou o usuário")
-    
-    print(user.verify_password(password))
 
     if not user.verify_password(password):
         return False

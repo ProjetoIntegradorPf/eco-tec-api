@@ -4,7 +4,6 @@ def create_donation_in_db(donation_data, db, current_user_id):
 
     donation = DonationModel(**donation_data)
     donation.user_id = current_user_id
-    print(donation)
     db.add(donation)
     db.commit()
     return donation
