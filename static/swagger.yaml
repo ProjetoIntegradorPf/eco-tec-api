@@ -1,16 +1,28 @@
 openapi: 3.0.0
 info:
-  title: API de Usuários
+  title: API de Gestão de ONG Eco Patinhas
   version: 1.0.0
-  description: API para gerenciamento de usuários com autenticação JWT.
+  description: API para gerenciamento de usuários, doações, vendas e castrações com autenticação JWT.
   
 servers:
   - url: http://localhost:5000/api
     description: Servidor local
 
+tags:
+  - name: Users
+    description: Operações relacionadas a usuários
+  - name: Donations
+    description: Operações relacionadas às doações
+  - name: Sales
+    description: Operações relacionadas às vendas das tampinhas
+  - name: Castrations
+    description: Operações relacionadas às castrações
+
 paths:
   /users:
     post:
+      tags:
+        - Users
       summary: Criação de usuário
       description: Cria um novo usuário.
       requestBody:
@@ -39,6 +51,8 @@ paths:
 
   /token:
     post:
+      tags:
+       - Users
       summary: Geração de Token JWT
       description: Gera um token JWT para o usuário autenticado.
       requestBody:
@@ -91,6 +105,8 @@ paths:
 
   /users/me:
     get:
+      tags:
+        - Users
       summary: Informações do usuário atual
       description: Obtém as informações do usuário autenticado.
       security:
@@ -125,6 +141,8 @@ paths:
 
   /logout:
     post:
+      tags:
+        - Users
       summary: Efetua o logout e revoga o token JWT
       security:
         - bearerAuth: []
@@ -141,6 +159,402 @@ paths:
                     example: "Logout realizado com sucesso. Token revogado."
         "401":
           description: Token inválido ou não fornecido
+
+  /donations:
+    get:
+      tags:
+        - Donations
+      summary: Listar todas as doações com filtros
+      description: Lista todas as doações com filtros opcionais (doador, data, quantidade).
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: donor_name
+          schema:
+            type: string
+          description: Nome do doador
+        - in: query
+          name: donation_date
+          schema:
+            type: string
+            format: date
+          description: Data da doação (AAAA-MM-DD)
+        - in: query
+          name: quantity
+          schema:
+            type: integer
+          description: Quantidade de tampinhas doadas
+      responses:
+        '200':
+          description: Lista de doações.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DonationSchema'
+
+    post:
+      tags:
+        - Donations
+      summary: Registrar uma nova doação
+      description: Adiciona uma nova doação ao sistema.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonationCreateSchema'
+      responses:
+        '201':
+          description: Doação registrada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationSchema'
+
+  /donations/{donationId}:
+    get:
+      tags:
+        - Donations
+      summary: Obter uma doação específica
+      description: Retorna os detalhes de uma doação específica.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: donationId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID da doação
+      responses:
+        '200':
+          description: Detalhes da doação.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationSchema'
+        '404':
+          description: Doação não encontrada.
+
+    put:
+      tags:
+        - Donations
+      summary: Atualizar uma doação
+      description: Atualiza os detalhes de uma doação existente.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: donationId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID da doação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonationCreateSchema'
+      responses:
+        '200':
+          description: Doação atualizada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationSchema'
+
+    delete:
+      tags:
+        - Donations
+      summary: Deletar uma doação
+      description: Remove uma doação existente.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: donationId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID da doação
+      responses:
+        '204':
+          description: Doação deletada com sucesso.
+        '404':
+          description: Doação não encontrada.
+
+  /sales:
+    get:
+      tags:
+        - Sales
+      summary: Listar todas as vendas com filtros
+      description: Lista todas as vendas com filtros opcionais (comprador, data, quantidade).
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: buyer_name
+          schema:
+            type: string
+          description: Nome do comprador
+        - in: query
+          name: sale_date
+          schema:
+            type: string
+            format: date
+          description: Data da venda (AAAA-MM-DD)
+        - in: query
+          name: quantity_sold
+          schema:
+            type: integer
+          description: Quantidade de tampinhas vendidas
+      responses:
+        '200':
+          description: Lista de vendas.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SaleSchema'
+
+    post:
+      tags:
+        - Sales
+      summary: Registrar uma nova venda
+      description: Adiciona uma nova venda de tampinhas ao sistema.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleCreateSchema'
+      responses:
+        '201':
+          description: Venda registrada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleSchema'
+
+  /sales/{saleId}:
+    get:
+      tags:
+        - Sales
+      summary: Obter uma venda específica
+      description: Retorna os detalhes de uma venda específica.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: saleId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID da venda
+      responses:
+        '200':
+          description: Detalhes da venda.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleSchema'
+        '404':
+          description: Venda não encontrada.
+
+    put:
+      tags:
+        - Sales
+      summary: Atualizar uma venda
+      description: Atualiza os detalhes de uma venda existente.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: saleId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID da venda
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleCreateSchema'
+      responses:
+        '200':
+          description: Venda atualizada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleSchema'
+
+    delete:
+      tags:
+        - Sales
+      summary: Deletar uma venda
+      description: Remove uma venda existente.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: saleId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID da venda
+      responses:
+        '204':
+          description: Venda deletada com sucesso.
+        '404':
+          description: Venda não encontrada.
+
+  /castrations:
+    get:
+      tags:
+        - Castrations
+      summary: Listar todas as castrações com filtros
+      description: Lista todas as castrações com filtros opcionais (nome do animal, data, clínica).
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: animal_name
+          schema:
+            type: string
+          description: Nome do animal
+        - in: query
+          name: neutering_date
+          schema:
+            type: string
+            format: date
+          description: Data da castração (AAAA-MM-DD)
+        - in: query
+          name: clinic_name
+          schema:
+            type: string
+          description: Nome da clínica
+      responses:
+        '200':
+          description: Lista de castrações.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CastrationSchema'
+
+    post:
+      tags:
+        - Castrations
+      summary: Registrar uma nova castração
+      description: Adiciona uma nova castração ao sistema.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CastrationCreateSchema'
+      responses:
+        '201':
+          description: Castração registrada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CastrationSchema'
+
+  /castrations/{castrationId}:
+    get:
+      tags:
+        - Castrations
+      summary: Obter uma castração específica
+      description: Retorna os detalhes de uma castração específica.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: castrationId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID da castração
+      responses:
+        '200':
+          description: Detalhes da castração.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CastrationSchema'
+        '404':
+          description: Castração não encontrada.
+
+    put:
+      tags:
+        - Castrations
+      summary: Atualizar uma castração
+      description: Atualiza os detalhes de uma castração existente.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: castrationId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID da castração
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CastrationCreateSchema'
+      responses:
+        '200':
+          description: Castração atualizada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CastrationSchema'
+
+    delete:
+      tags:
+        - Castrations
+      summary: Deletar uma castração
+      description: Remove uma castração existente.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: castrationId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID da castração
+      responses:
+        '204':
+          description: Castração deletada com sucesso.
+        '404':
+          description: Castração não encontrada.
 
 components:
   securitySchemes:
@@ -198,3 +612,115 @@ components:
           type: string
           format: date-time
           example: 2024-10-19T16:17:00Z
+
+    DonationCreateSchema:
+      type: object
+      properties:
+        donor_name:
+          type: string
+          example: Jane Doe
+        donation_date:
+          type: string
+          format: date-time
+          example: 2024-10-20T12:00:00Z
+        quantity:
+          type: integer
+          example: 1000
+
+    DonationSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        donor_name:
+          type: string
+          example: Jane Doe
+        donation_date:
+          type: string
+          format: date-time
+          example: 2024-10-20T12:00:00Z
+        quantity:
+          type: integer
+          example: 1000
+
+    SaleCreateSchema:
+      type: object
+      properties:
+        buyer_name:
+          type: string
+          example: Company ABC
+        sale_date:
+          type: string
+          format: date-time
+          example: 2024-10-21T12:00:00Z
+        quantity_sold:
+          type: integer
+          example: 1000
+        total_value:
+          type: number
+          format: float
+          example: 500.00
+
+    SaleSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        buyer_name:
+          type: string
+          example: Company ABC
+        sale_date:
+          type: string
+          format: date-time
+          example: 2024-10-21T12:00:00Z
+        quantity_sold:
+          type: integer
+          example: 1000
+        total_value:
+          type: number
+          format: float
+          example: 500.00
+
+    CastrationCreateSchema:
+      type: object
+      properties:
+        animal_name:
+          type: string
+          example: Rex
+        neutering_date:
+          type: string
+          format: date-time
+          example: 2024-10-22T12:00:00Z
+        clinic_name:
+          type: string
+          example: Vet Clinic XYZ
+        cost:
+          type: number
+          format: float
+          example: 200.00
+
+    CastrationSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        animal_name:
+          type: string
+          example: Rex
+        neutering_date:
+          type: string
+          format: date-time
+          example: 2024-10-22T12:00:00Z
+        clinic_name:
+          type: string
+          example: Vet Clinic XYZ
+        cost:
+          type: number
+          format: float
+          example: 200.00

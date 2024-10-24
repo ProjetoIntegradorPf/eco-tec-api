@@ -2,7 +2,7 @@ from datetime import timedelta
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, get_jwt, jwt_required, get_jwt_identity
 from sqlalchemy.orm import Session
-from database.dateabase import get_db
+from database.database import get_db
 from models.user_model import UserModel
 import schemas.user_schema as user_schemas
 import services.user_service as user_service
@@ -42,7 +42,7 @@ def generate_token():
         return jsonify({"detail": "Invalid request, JSON data expected"}), 400
     
     username = form_data.get('username')
-    password = form_data.get('password')
+    password = form_data.get('hashed_password')
 
     user = user_service.authenticate_user(username, password, db)
 

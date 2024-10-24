@@ -1,11 +1,14 @@
 from flask import Flask
 from flask_cors import CORS
-from database.dateabase import create_database
+from database.database import create_database
 from flask_jwt_extended import JWTManager
 from flask_swagger_ui import get_swaggerui_blueprint
 
 # Importar seus blueprints ou rotas
 from controllers.user_controller import user_blueprint
+from controllers.castration_controller import castration_blueprint
+from controllers.donation_controller import donation_blueprint
+from controllers.sale_controller import sale_blueprint
 
 # Inicializar a aplicação Flask
 app = Flask(__name__)
@@ -30,6 +33,9 @@ CORS(app)
 
 # Registrar os blueprints
 app.register_blueprint(user_blueprint, url_prefix='/api')
+app.register_blueprint(castration_blueprint, url_prefix='/api')
+app.register_blueprint(sale_blueprint, url_prefix='/api')
+app.register_blueprint(donation_blueprint, url_prefix='/api')
 app.register_blueprint(swaggerui_blueprint)
 
 # Criar o banco de dados

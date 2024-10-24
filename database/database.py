@@ -15,6 +15,10 @@ def create_database():
     Função para criar todas as tabelas no banco de dados com base nos modelos.
     """
     from models.user_model import UserModel  # Certifique-se de que o modelo está sendo importado
+    from models.donation_model import DonationModel
+    from models.financial_report_model import FinancialReportModel
+    from models.castration_model import CastrationModel
+    from models.sale_model import SaleModel
     print("Tentando criar tabelas...")
     
     # Print para verificar quais tabelas SQLAlchemy conhece
