@@ -36,3 +36,7 @@ def filter_donations(filters, db):
         query = query.filter(DonationModel.donor_name == filters['donor_name'])
     # Adicione outros filtros
     return query.all()
+
+def delete_donation_repo(donationId, db):
+    db.query(DonationModel).filter_by(id=donationId).delete()
+    db.commit()

@@ -2,7 +2,8 @@ from repositories.donation_repository import (
     create_donation_in_db, 
     get_donation_by_id as get_donation_by_id_repo, 
     update_donation_in_db, 
-    filter_donations
+    filter_donations,
+    delete_donation_repo
 )
 from flask import jsonify
 
@@ -23,7 +24,7 @@ def create_donation(donation_data, db, current_user_id):
     # Se todas as validações passarem, cria a doação
     return create_donation_in_db(donation_data, db, current_user_id)
 
-def get_donation_by_id(donationId, db, current_user_id):
+def get_donation_by_id(donationId, db):
     # Verificação: doação existe?
     donation = get_donation_by_id_repo(donationId, db)
     if not donation:
@@ -44,3 +45,13 @@ def update_donation(donationId, donation_data, db, current_user_id):
     # Se passar em todas as validações, atualizar a doação
     updated_donation = update_donation_in_db(donationId, donation_data, db, current_user_id)
     return updated_donation
+
+
+def delete_donation(donationId, db):
+    donation = get_donation_by_id_repo(donationId, db)
+    if not donation:
+        return jsonify({"detail": "Doação não encontrada."}), 404
+    
+    delete_donation_repo(donationId, db)
+
+    return None

@@ -36,8 +36,7 @@ def create_sale():
 @jwt_required()
 def get_sale_by_id(saleId):
     db: Session = get_db()
-    current_user_id = get_jwt_identity()
-    sale = sale_service.get_sale_by_id(saleId, db, current_user_id)
+    sale = sale_service.get_sale_by_id(saleId, db)
 
     if isinstance(sale, tuple):
         return sale
@@ -56,3 +55,17 @@ def update_sale(saleId):
         return sale
 
     return jsonify(sale.to_dict()), 200
+
+
+@sale_blueprint.route('/sales/<saleId>', methods=['DELETE'])
+@jwt_required()
+def delete_sale(saleId):
+    db: Session = get_db()
+    # Obtém a castração e verifica se o usuário tem permissão para visualizar
+    sale = sale_service.delete_sale(saleId, db)
+
+    # Retorna erro se a castração não for encontrada ou se o usuário não tiver permissão
+    if isinstance(sale, tuple):
+        return sale
+
+    return jsonify(sale), 200

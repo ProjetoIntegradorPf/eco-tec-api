@@ -44,9 +44,8 @@ def create_donation():
 @jwt_required()
 def get_donation_by_id(donationId):
     db: Session = get_db()
-    current_user_id = get_jwt_identity()
 
-    donation = donation_service.get_donation_by_id(donationId, db, current_user_id)
+    donation = donation_service.get_donation_by_id(donationId, db)
 
     # Verificando se a doação foi encontrada ou se houve erro de permissão
     if isinstance(donation, tuple):
@@ -70,3 +69,16 @@ def update_donation(donationId):
         return donation  # Retorna o erro apropriado
 
     return jsonify(donation.to_dict()), 200
+
+@donation_blueprint.route('/donations/<donationId>', methods=['DELETE'])
+@jwt_required()
+def delete_donation(donationId):
+    db: Session = get_db()
+    # Obtém a castração e verifica se o usuário tem permissão para visualizar
+    donation = donation_service.delete_donation(donationId, db)
+
+    # Retorna erro se a castração não for encontrada ou se o usuário não tiver permissão
+    if isinstance(donation, tuple):
+        return donation
+
+    return jsonify(donation), 200

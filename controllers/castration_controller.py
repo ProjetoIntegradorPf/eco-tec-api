@@ -43,10 +43,8 @@ def create_castration():
 @jwt_required()
 def get_castration_by_id(castrationId):
     db: Session = get_db()
-    current_user_id = get_jwt_identity()
-
     # Obtém a castração e verifica se o usuário tem permissão para visualizar
-    castration = castration_service.get_castration_by_id(castrationId, db, current_user_id)
+    castration = castration_service.get_castration_by_id(castrationId, db)
 
     # Retorna erro se a castração não for encontrada ou se o usuário não tiver permissão
     if isinstance(castration, tuple):
@@ -71,3 +69,17 @@ def update_castration(castrationId):
         return castration
 
     return jsonify(castration.to_dict()), 200
+
+
+@castration_blueprint.route('/castrations/<castrationId>', methods=['DELETE'])
+@jwt_required()
+def delete_castration(castrationId):
+    db: Session = get_db()
+    # Obtém a castração e verifica se o usuário tem permissão para visualizar
+    castration = castration_service.delete_castration(castrationId, db)
+
+    # Retorna erro se a castração não for encontrada ou se o usuário não tiver permissão
+    if isinstance(castration, tuple):
+        return castration
+
+    return jsonify(castration), 200

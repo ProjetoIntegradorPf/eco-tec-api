@@ -26,3 +26,7 @@ def filter_castrations(filters, db):
         query = query.filter(CastrationModel.animal_name == filters['animal_name'])
     # Adicione outros filtros
     return query.all()
+ 
+def delete_castration_repo(castrationId, db):
+    db.query(CastrationModel).filter_by(id=castrationId).delete()
+    db.commit()

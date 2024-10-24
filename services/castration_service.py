@@ -3,7 +3,8 @@ from repositories.castration_repository import (
     create_castration_in_db, 
     get_castration_by_id as get_castration_by_id_repo, 
     update_castration_in_db, 
-    filter_castrations
+    filter_castrations,
+    delete_castration_repo
 )
 
 def get_castrations(filters, db):
@@ -32,15 +33,11 @@ def create_castration(castration_data, db, current_user_id):
     # Se todas as validações forem bem-sucedidas, cria a castração
     return create_castration_in_db(castration_data, db, current_user_id)
 
-def get_castration_by_id(castrationId, db, current_user_id):
+def get_castration_by_id(castrationId, db):
     # Verificação: a castração existe?
     castration = get_castration_by_id_repo(castrationId, db)
     if not castration:
         return jsonify({"detail": "Castração não encontrada."}), 404
-
-    # Validação: verificar se o usuário tem permissão para visualizar a castração
-    if castration.user_id != current_user_id:
-        return jsonify({"detail": "Você não tem permissão para visualizar esta castração."}), 403
 
     return castration
 
@@ -49,10 +46,6 @@ def update_castration(castrationId, castration_data, db, current_user_id):
     castration = get_castration_by_id_repo(castrationId, db)
     if not castration:
         return jsonify({"detail": "Castração não encontrada."}), 404
-
-    # Validação: verificar se o usuário tem permissão para atualizar a castração
-    if castration.user_id != current_user_id:
-        return jsonify({"detail": "Você não tem permissão para atualizar esta castração."}), 403
 
     # Validação: verificar se os dados fornecidos são válidos
     if 'cost' in castration_data and castration_data['cost'] <= 0:
@@ -69,3 +62,12 @@ def update_castration(castrationId, castration_data, db, current_user_id):
     # Se as validações forem bem-sucedidas, atualiza a castração
     updated_castration = update_castration_in_db(castrationId, castration_data, db, current_user_id)
     return updated_castration
+
+def delete_castration(castrationId, db):
+    castration = get_castration_by_id_repo(castrationId, db)
+    if not castration:
+        return jsonify({"detail": "Castração não encontrada."}), 404
+    
+    delete_castration_repo(castrationId, db)
+
+    return None

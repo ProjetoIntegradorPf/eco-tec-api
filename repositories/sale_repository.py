@@ -27,3 +27,7 @@ def filter_sales(filters, db):
         query = query.filter(SaleModel.buyer_name == filters['buyer_name'])
     # Adicione outros filtros
     return query.all()
+
+def delete_sale_repo(saleId, db):
+    db.query(SaleModel).filter_by(id=saleId).delete()
+    db.commit()

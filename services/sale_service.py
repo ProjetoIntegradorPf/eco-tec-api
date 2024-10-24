@@ -3,7 +3,8 @@ from repositories.sale_repository import (
     create_sale_in_db, 
     get_sale_by_id as get_sale_by_id_repo, 
     update_sale_in_db, 
-    filter_sales
+    filter_sales,
+    delete_sale_repo
 )
 
 def get_sales(filters, db):
@@ -35,7 +36,7 @@ def create_sale(sale_data, db, current_user_id):
     # Se todas as validações forem bem-sucedidas, cria a venda
     return create_sale_in_db(sale_data, db, current_user_id)
 
-def get_sale_by_id(saleId, db, current_user_id):
+def get_sale_by_id(saleId, db):
     # Verificação: a venda existe?
     sale = get_sale_by_id_repo(saleId, db)
     if not sale:
@@ -66,3 +67,13 @@ def update_sale(saleId, sale_data, db, current_user_id):
     # Se as validações forem bem-sucedidas, atualiza a venda
     updated_sale = update_sale_in_db(saleId, sale_data, db, current_user_id)
     return updated_sale
+
+
+def delete_sale(saleId, db):
+    sale = get_sale_by_id_repo(saleId, db)
+    if not sale:
+        return jsonify({"detail": "Venda não encontrada."}), 404
+    
+    delete_sale_repo(saleId, db)
+
+    return None
