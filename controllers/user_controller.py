@@ -50,7 +50,7 @@ def generate_token():
         return jsonify({"detail": "Invalid Credentials"}), 401
 
     # Definindo a validade do token para 1 hora
-    expires = timedelta(hours=1)
+    expires = timedelta(days=1)
 
     # Cria um novo token JWT para o usuário autenticado com expiração
     token = create_access_token(identity=user.id, expires_delta=expires)

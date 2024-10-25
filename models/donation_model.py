@@ -10,8 +10,8 @@ class DonationModel(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     donor_name = Column(String, index=True)  # Nome do doador
-    donation_date = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))  # Data da doação
-    quantity = Column(Integer)  # Quantidade de tampinhas doadas
+    donation_date = Column(Date, default=datetime.datetime.now(datetime.timezone.utc))  # Data da doação
+    quantity = Column(Float)  # Quantidade de tampinhas doadas
 
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))  # Relacionamento com a tabela 'users'
     user = relationship("UserModel", back_populates="donations")
