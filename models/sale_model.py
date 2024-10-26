@@ -10,7 +10,7 @@ class SaleModel(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     buyer_name = Column(String, index=True)  # Nome do comprador
     sale_date = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))  # Data da venda
-    quantity_sold = Column(Integer)  # Quantidade de tampinhas vendidas
+    quantity_sold = Column(Float)  # Quantidade de tampinhas vendidas
     total_value = Column(Float)  # Valor arrecadado com a venda
 
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))  # Relacionamento com a tabela 'users'

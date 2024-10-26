@@ -183,7 +183,7 @@ paths:
         - in: query
           name: quantity
           schema:
-            type: integer
+            type: number
           description: Quantidade de tampinhas doadas
       responses:
         '200':
@@ -315,7 +315,7 @@ paths:
         - in: query
           name: quantity_sold
           schema:
-            type: integer
+            type: number
           description: Quantidade de tampinhas vendidas
       responses:
         '200':
@@ -624,7 +624,7 @@ components:
           format: date-time
           example: 2024-10-20T12:00:00Z
         quantity:
-          type: integer
+          type: number
           example: 1000
 
     DonationSchema:
@@ -642,7 +642,7 @@ components:
           format: date-time
           example: 2024-10-20T12:00:00Z
         quantity:
-          type: integer
+          type: number
           example: 1000
 
     SaleCreateSchema:
@@ -656,7 +656,7 @@ components:
           format: date-time
           example: 2024-10-21T12:00:00Z
         quantity_sold:
-          type: integer
+          type: number
           example: 1000
         total_value:
           type: number
@@ -678,7 +678,7 @@ components:
           format: date-time
           example: 2024-10-21T12:00:00Z
         quantity_sold:
-          type: integer
+          type: number
           example: 1000
         total_value:
           type: number
