@@ -1,7 +1,4 @@
 from models.user_model import UserModel
-from datetime import datetime
-
-from schemas.user_schema import UserSchema
 
 def create_initial_user(db):
     user_data = {

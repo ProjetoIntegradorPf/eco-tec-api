@@ -445,7 +445,7 @@ paths:
             format: date
           description: Data da castração (AAAA-MM-DD)
         - in: query
-          name: clinic_name
+          name: clinic_name_or_veterinary_name
           schema:
             type: string
           description: Nome da clínica
@@ -695,7 +695,7 @@ components:
           type: string
           format: date-time
           example: 2024-10-22T12:00:00Z
-        clinic_name:
+        clinic_name_or_veterinary_name:
           type: string
           example: Vet Clinic XYZ
         cost:
@@ -717,7 +717,7 @@ components:
           type: string
           format: date-time
           example: 2024-10-22T12:00:00Z
-        clinic_name:
+        clinic_name_or_veterinary_name:
           type: string
           example: Vet Clinic XYZ
         cost:

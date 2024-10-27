@@ -13,7 +13,7 @@ def get_castrations(filters, db):
 
 def create_castration(castration_data, db, current_user_id):
     # Validação: verificar se todos os campos obrigatórios estão presentes
-    required_fields = ['animal_name', 'castration_date', 'clinic_name', 'cost']
+    required_fields = ['animal_name', 'neutering_date', 'clinic_name_or_veterinary_name', 'cost']
     for field in required_fields:
         if field not in castration_data or not castration_data[field]:
             return jsonify({"detail": f"Campo obrigatório '{field}' está ausente ou vazio."}), 400
@@ -26,7 +26,7 @@ def create_castration(castration_data, db, current_user_id):
     try:
         # Tenta converter a data para verificar a validade
         from datetime import datetime
-        datetime.strptime(castration_data['castration_date'], '%Y-%m-%d')
+        datetime.strptime(castration_data['neutering_date'], '%Y-%m-%d')
     except ValueError:
         return jsonify({"detail": "Formato de data inválido. Use 'YYYY-MM-DD'."}), 400
 
@@ -51,11 +51,11 @@ def update_castration(castrationId, castration_data, db, current_user_id):
     if 'cost' in castration_data and castration_data['cost'] <= 0:
         return jsonify({"detail": "O custo da castração deve ser um número positivo."}), 400
 
-    if 'castration_date' in castration_data:
+    if 'neutering_date' in castration_data:
         try:
             # Tenta converter a data para verificar a validade
             from datetime import datetime
-            datetime.strptime(castration_data['castration_date'], '%Y-%m-%d')
+            datetime.strptime(castration_data['neutering_date'], '%Y-%m-%d')
         except ValueError:
             return jsonify({"detail": "Formato de data inválido. Use 'YYYY-MM-DD'."}), 400
 

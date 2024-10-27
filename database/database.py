@@ -22,9 +22,6 @@ def create_database():
     
     Base.metadata.create_all(bind=engine)
 
-
-
-
 def get_db():
     """
     Dependency to get the database session.
