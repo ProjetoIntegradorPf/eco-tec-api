@@ -9,6 +9,7 @@ from controllers.user_controller import user_blueprint
 from controllers.castration_controller import castration_blueprint
 from controllers.donation_controller import donation_blueprint
 from controllers.sale_controller import sale_blueprint
+from controllers.report_controller import report_blueprint
 
 # Inicializar a aplicação Flask
 app = Flask(__name__)
@@ -36,9 +37,9 @@ app.register_blueprint(user_blueprint, url_prefix='/api')
 app.register_blueprint(castration_blueprint, url_prefix='/api')
 app.register_blueprint(sale_blueprint, url_prefix='/api')
 app.register_blueprint(donation_blueprint, url_prefix='/api')
+app.register_blueprint(report_blueprint, url_prefix='/api')
 app.register_blueprint(swaggerui_blueprint)
 
-# Criar o banco de dados
 create_database()
 
 if __name__ == "__main__":

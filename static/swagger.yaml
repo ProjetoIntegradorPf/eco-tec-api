@@ -17,6 +17,8 @@ tags:
     description: Operações relacionadas às vendas das tampinhas
   - name: Castrations
     description: Operações relacionadas às castrações
+  - name: Reports
+    description: Operações relacionadas aos relatórios
 
 paths:
   /users:
@@ -556,6 +558,47 @@ paths:
         '404':
           description: Castração não encontrada.
 
+  /reports:
+    get:
+      tags:
+        - Reports
+      summary: Listar relatório com filtros
+      description: Lista todos os relatório com filtros opcionais por data de criação.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+          description: Data de início para o filtro (AAAA-MM-DD)
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+          description: Data de fim para o filtro (AAAA-MM-DD)
+      responses:
+        '200':
+          description: Lista de relatórios.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FinancialReportSchema'
+        '400':
+          description: Data inválida fornecida.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Invalid date format. Expected YYYY-MM-DD.
+
 components:
   securitySchemes:
     bearerAuth:
@@ -724,3 +767,42 @@ components:
           type: number
           format: float
           example: 200.00
+    ReportSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        donation_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174001"
+        donation:
+          type: number
+          format: float
+          example: 500.00
+        sale_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174002"
+        sale_qtd_sold:
+          type: number
+          format: float
+          example: 100.0
+        sale_value:
+          type: number
+          format: float
+          example: 1500.00
+        castration_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174003"
+        castration_value:
+          type: number
+          format: float
+          example: 300.00
+        date_created:
+          type: string
+          format: date
+          example: "2024-10-01"

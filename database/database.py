@@ -16,7 +16,7 @@ def create_database():
     """
     from models.user_model import UserModel  # Certifique-se de que o modelo está sendo importado
     from models.donation_model import DonationModel
-    from models.financial_report_model import FinancialReportModel
+    from models.report_model import ReportModel
     from models.castration_model import CastrationModel
     from models.sale_model import SaleModel
     

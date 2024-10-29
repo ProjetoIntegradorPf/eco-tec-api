@@ -1,4 +1,5 @@
 from models.donation_model import DonationModel
+from models.report_model import ReportModel
 
 def create_donation_in_db(donation_data, db, current_user_id):
 
@@ -38,4 +39,22 @@ def filter_donations(filters, db):
 
 def delete_donation_repo(donationId, db):
     db.query(DonationModel).filter_by(id=donationId).delete()
+    db.commit()
+
+def insert_donation_in_report(donation, db):
+    report = ReportModel()
+    report.donation_id = donation.id
+    report.donation = donation.quantity
+    report.date_created = donation.donation_date
+    db.add(report)
+    db.commit()
+
+def update_donation_in_report(donation, db):
+    report = db.query(ReportModel).filter_by(donation_id=donation.id).first()
+    report.donation = donation.quantity
+    report.date_created = donation.donation_date
+    db.commit()
+
+def delete_donation_report(id, db):
+    db.query(ReportModel).filter_by(donation_id=id).delete()
     db.commit()

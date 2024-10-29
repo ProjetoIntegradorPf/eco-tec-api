@@ -1,4 +1,5 @@
 from models.castration_model import CastrationModel
+from models.report_model import ReportModel
 
 def create_castration_in_db(castration_data, db, current_user_id):
     castration = CastrationModel(**castration_data)
@@ -29,4 +30,23 @@ def filter_castrations(filters, db):
  
 def delete_castration_repo(castrationId, db):
     db.query(CastrationModel).filter_by(id=castrationId).delete()
+    db.commit()
+
+def insert_castration_in_report(castration, db):
+    report = ReportModel()
+    report.castration_id = castration.id
+    report.castration_value = castration.cost
+    report.date_created = castration.neutering_date
+    db.add(report)
+    db.commit()
+
+def update_castration_in_report(castration, db):
+    id = castration.id
+    report = db.query(ReportModel).filter_by(castration_id=id).first()
+    report.castration_value = castration.cost
+    report.date_created = castration.neutering_date
+    db.commit()
+
+def delete_castration_report(id, db):
+    db.query(ReportModel).filter_by(castration_id=id).delete()
     db.commit()
