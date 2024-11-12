@@ -587,7 +587,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/FinancialReportSchema'
+                  $ref: '#/components/schemas/ReportSchema'
         '400':
           description: Data inválida fornecida.
           content:
