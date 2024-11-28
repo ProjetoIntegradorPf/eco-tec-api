@@ -18,3 +18,6 @@ ENV FLASK_APP=main.py
 
 # Expõe a porta 5000, que é a porta padrão do Flask
 EXPOSE 5000
+
+# Comando para executar o servidor Flask ao iniciar o container
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
