@@ -13,12 +13,17 @@ tags:
     description: Operações relacionadas a usuários
   - name: Donations
     description: Operações relacionadas às doações
+  - name: CashDonations
+    description: Operações relacionadas às doações em dinheiro
   - name: Sales
     description: Operações relacionadas às vendas das tampinhas
   - name: Castrations
     description: Operações relacionadas às castrações
+  - name: MiscExpenses
+    description: Operações relacionadas a gastos diversos da ONG
   - name: Reports
     description: Operações relacionadas aos relatórios
+
 
 paths:
   /users:
@@ -294,6 +299,161 @@ paths:
         '404':
           description: Doação não encontrada.
 
+  /cash-donations:
+    get:
+      tags:
+        - CashDonations
+      summary: Listar todas as doações em dinheiro com filtros
+      description: Lista todas as doações em dinheiro com filtros opcionais (nome do doador, data, valor).
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: donor_name
+          schema:
+            type: string
+          description: Nome do doador
+        - in: query
+          name: donation_date
+          schema:
+            type: string
+            format: date
+          description: Data da doação (AAAA-MM-DD)
+        - in: query
+          name: quantity
+          schema:
+            type: number
+          description: Valor doado
+      responses:
+        '200':
+          description: Lista de doações em dinheiro.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DonationSchema'
+
+    post:
+      tags:
+        - CashDonations
+      summary: Registrar uma nova doação em dinheiro
+      description: Registra uma nova doação em dinheiro no sistema.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonationCreateSchema'
+      responses:
+        '201':
+          description: Doação registrada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationSchema'
+        '400':
+          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Campo obrigatório 'donor_name' está ausente ou vazio.
+
+  /cash-donations/{donationId}:
+    get:
+      tags:
+        - CashDonations
+      summary: Obter detalhes de uma doação em dinheiro
+      description: Retorna os detalhes de uma doação em dinheiro pelo ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: donationId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID da doação
+      responses:
+        '200':
+          description: Detalhes da doação em dinheiro.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationSchema'
+        '404':
+          description: Doação não encontrada.
+
+    put:
+      tags:
+        - CashDonations
+      summary: Atualizar uma doação em dinheiro
+      description: Atualiza os dados de uma doação em dinheiro existente.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: donationId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID da doação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonationCreateSchema'
+      responses:
+        '200':
+          description: Doação em dinheiro atualizada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationSchema'
+        '400':
+          description: Valor inválido.
+
+    delete:
+      tags:
+        - CashDonations
+      summary: Deletar uma doação em dinheiro
+      description: Remove uma doação em dinheiro existente.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: donationId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID da doação
+      responses:
+        '204':
+          description: Doação deletada com sucesso.
+        '404':
+          description: Doação não encontrada.
+        '400':
+          description: Não é possível excluir a doação.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Você não pode excluir essa doação, pois o valor restante ficaria menor do que o montante já gasto.
+
+
   /sales:
     get:
       tags:
@@ -557,13 +717,153 @@ paths:
           description: Castração deletada com sucesso.
         '404':
           description: Castração não encontrada.
+  /misc-expenses:
+    get:
+      tags:
+        - MiscExpenses
+      summary: Listar todos os gastos diversos
+      description: Lista todos os gastos diversos com filtros opcionais.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: description
+          schema:
+            type: string
+          description: Descrição da despesa
+        - in: query
+          name: expense_date
+          schema:
+            type: string
+            format: date
+          description: Data da despesa (AAAA-MM-DD)
+      responses:
+        '200':
+          description: Lista de gastos diversos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MiscExpenseSchema'
+
+    post:
+      tags:
+        - MiscExpenses
+      summary: Registrar novo gasto diverso
+      description: Registra um novo gasto diverso no sistema.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MiscExpenseCreateSchema'
+      responses:
+        '201':
+          description: Gasto registrado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MiscExpenseSchema'
+        '400':
+          description: Dados inválidos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Campo obrigatório 'description' está ausente ou vazio.
+
+  /misc-expenses/{expenseId}:
+    get:
+      tags:
+        - MiscExpenses
+      summary: Obter gasto específico
+      description: Retorna os detalhes de um gasto específico.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: expenseId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID do gasto
+      responses:
+        '200':
+          description: Detalhes do gasto.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MiscExpenseSchema'
+        '404':
+          description: Gasto não encontrado.
+
+    put:
+      tags:
+        - MiscExpenses
+      summary: Atualizar um gasto
+      description: Atualiza os dados de um gasto existente.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: expenseId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID do gasto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MiscExpenseCreateSchema'
+      responses:
+        '200':
+          description: Gasto atualizado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MiscExpenseSchema'
+        '400':
+          description: Dados inválidos.
+
+    delete:
+      tags:
+        - MiscExpenses
+      summary: Deletar um gasto
+      description: Remove um gasto existente.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: expenseId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID do gasto
+      responses:
+        '204':
+          description: Gasto deletado com sucesso.
+        '404':
+          description: Gasto não encontrado.
 
   /reports:
     get:
+      summary: Listar relatório com filtros
+      description: >
+        Lista todos os registros do relatório financeiro, incluindo dados consolidados de doações (tampinhas e dinheiro),
+        vendas, castrações e gastos diversos. Pode ser filtrado por período.
       tags:
         - Reports
-      summary: Listar relatório com filtros
-      description: Lista todos os relatório com filtros opcionais por data de criação.
       security:
         - bearerAuth: []
       parameters:
@@ -773,36 +1073,78 @@ components:
         id:
           type: string
           format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174000"
         donation_id:
           type: string
           format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174001"
         donation:
           type: number
           format: float
-          example: 500.00
         sale_id:
           type: string
           format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174002"
         sale_qtd_sold:
           type: number
           format: float
-          example: 100.0
         sale_value:
           type: number
           format: float
-          example: 1500.00
         castration_id:
           type: string
           format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174003"
         castration_value:
           type: number
           format: float
-          example: 300.00
+        misc_expense_id:
+          type: string
+          format: uuid
+          example: "789e4567-e89b-12d3-a456-426614174999"
+        misc_expense_value:
+          type: number
+          format: float
+          example: 85.50
         date_created:
           type: string
           format: date
           example: "2024-10-01"
+
+    MiscExpenseCreateSchema:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Compra de ração emergencial
+        expense_date:
+          type: string
+          format: date-time
+          example: 2024-10-23T14:30:00Z
+        value:
+          type: number
+          format: float
+          example: 150.00
+
+    MiscExpenseSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "456e1234-e89b-12d3-a456-426614174111"
+        description:
+          type: string
+          example: Compra de ração emergencial
+        expense_date:
+          type: string
+          format: date-time
+          example: 2024-10-23T14:30:00Z
+        value:
+          type: number
+          format: float
+          example: 150.00
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-10-23T14:31:00Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2024-10-23T14:35:00Z

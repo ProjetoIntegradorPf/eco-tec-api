@@ -33,7 +33,6 @@ def create_sale(sale_data, db, current_user_id):
 
     # Validação: a data da venda deve estar no formato correto
     try:
-        from datetime import datetime
         datetime.strptime(sale_data['sale_date'], '%Y-%m-%d')
     except ValueError:
         return jsonify({"detail": "Formato de data inválido. Use 'YYYY-MM-DD'."}), 400
@@ -84,7 +83,6 @@ def update_sale(saleId, sale_data, db, current_user_id):
 
     if 'sale_date' in sale_data:
         try:
-            from datetime import datetime
             datetime.strptime(sale_data['sale_date'], '%Y-%m-%d')
         except ValueError:
             return jsonify({"detail": "Formato de data inválido. Use 'YYYY-MM-DD'."}), 400

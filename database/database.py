@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 # Configuração do banco de dados
-DATABASE_URL = "postgresql://eco-tec-api-user:password@localhost:5439/eco-tec-api-user"
+DATABASE_URL = "postgresql://admin:LgiiTULlqXwGCV4OXSyPPriWu4QNOqL0@dpg-d0bt0nbuibrs73dl66gg-a.oregon-postgres.render.com/eco_tec"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

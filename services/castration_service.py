@@ -10,6 +10,7 @@ from repositories.castration_repository import (
     update_castration_in_report
 )
 from .report_service import get_all_financial_reports
+from datetime import datetime
 
 def get_castrations(filters, db):
     # Nenhuma validação necessária aqui, apenas filtramos os dados conforme os parâmetros
@@ -29,7 +30,6 @@ def create_castration(castration_data, db, current_user_id):
     # Validação: a data da castração deve estar no formato correto
     try:
         # Tenta converter a data para verificar a validade
-        from datetime import datetime
         datetime.strptime(castration_data['neutering_date'], '%Y-%m-%d')
     except ValueError:
         return jsonify({"detail": "Formato de data inválido. Use 'YYYY-MM-DD'."}), 400
@@ -76,8 +76,6 @@ def update_castration(castrationId, castration_data, db, current_user_id):
 
     if 'neutering_date' in castration_data:
         try:
-            # Tenta converter a data para verificar a validade
-            from datetime import datetime
             datetime.strptime(castration_data['neutering_date'], '%Y-%m-%d')
         except ValueError:
             return jsonify({"detail": "Formato de data inválido. Use 'YYYY-MM-DD'."}), 400

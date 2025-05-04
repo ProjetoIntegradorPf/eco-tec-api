@@ -22,6 +22,7 @@ class UserModel(Base):
 
 
     donations = relationship("DonationModel", back_populates="user")
+    cash_donations = relationship("CashDonationModel", back_populates="user")
     sales = relationship("SaleModel", back_populates="user")
     castrations = relationship("CastrationModel", back_populates="user")
 

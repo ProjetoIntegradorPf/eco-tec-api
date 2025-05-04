@@ -15,6 +15,9 @@ class ReportModel(Base):
     castration_id = Column(UUID(as_uuid=True))
     castration_value = Column(Float, default=0)
     date_created = Column(Date, default=datetime.datetime.now(datetime.timezone.utc))
+    misc_expense_id = Column(UUID(as_uuid=True))
+    misc_expense_value = Column(Float, default=0)
+
 
     def to_dict(self):
         return {
@@ -26,5 +29,7 @@ class ReportModel(Base):
             "sale_value": self.sale_value,
             "castration_id": self.castration_id,
             "castration_value": self.castration_value,
+            "misc_expense_id": self.misc_expense_id,
+            "misc_expense_value": self.misc_expense_value,
             "date_created": self.date_created.isoformat(),
         }
