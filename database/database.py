@@ -1,9 +1,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
 # Configuração do banco de dados
-DATABASE_URL = "postgresql://admin:LgiiTULlqXwGCV4OXSyPPriWu4QNOqL0@dpg-d0bt0nbuibrs73dl66gg-a.oregon-postgres.render.com/eco_tec"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
