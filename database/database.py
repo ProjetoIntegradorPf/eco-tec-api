@@ -19,6 +19,8 @@ def create_database():
     from models.report_model import ReportModel
     from models.castration_model import CastrationModel
     from models.sale_model import SaleModel
+    from models.cash_donation_model import CashDonationModel   
+    from models.misc_expense_model import MiscExpenseModel 
     
     Base.metadata.create_all(bind=engine)
 
