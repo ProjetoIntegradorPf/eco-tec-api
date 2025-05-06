@@ -4,9 +4,9 @@ from sqlalchemy.orm import Session
 from database.database import get_db
 import services.cash_donation_service as cash_donation_service
 
-cash_donation_blueprint = Blueprint('cash_cash_donation_blueprint', __name__)
+cash_donation_blueprint = Blueprint('cash_donation_blueprint', __name__)
 
-@cash_donation_blueprint.route('/donations/cash-donations', methods=['GET'])
+@cash_donation_blueprint.route('/cash-donations', methods=['GET'])
 @jwt_required()
 def get_cash_donations():
     db: Session = get_db()
@@ -20,7 +20,7 @@ def get_cash_donations():
 
 
 # Rota para criar uma nova doação
-@cash_donation_blueprint.route('/donations/cash-donations', methods=['POST'])
+@cash_donation_blueprint.route('/cash-donations', methods=['POST'])
 @jwt_required()
 def create_cash_donation():
     db: Session = get_db()
@@ -39,7 +39,7 @@ def create_cash_donation():
 
 
 # Rota para obter uma doação específica
-@cash_donation_blueprint.route('/donations/cash-donations/<donationId>', methods=['GET'])
+@cash_donation_blueprint.route('/cash-donations/<donationId>', methods=['GET'])
 @jwt_required()
 def get_cahs_donation_by_id(donationId):
     db: Session = get_db()
@@ -54,7 +54,7 @@ def get_cahs_donation_by_id(donationId):
 
 
 # Rota para atualizar uma doação existente
-@cash_donation_blueprint.route('/donations/cash-donations/<donationId>', methods=['PUT'])
+@cash_donation_blueprint.route('/cash-donations/<donationId>', methods=['PUT'])
 @jwt_required()
 def update_donation(donationId):
     db: Session = get_db()
@@ -69,7 +69,7 @@ def update_donation(donationId):
 
     return jsonify(donation.to_dict()), 200
 
-@cash_donation_blueprint.route('/donations/cash-donations/<donationId>', methods=['DELETE'])
+@cash_donation_blueprint.route('/cash-donations/<donationId>', methods=['DELETE'])
 @jwt_required()
 def delete_donation(donationId):
     db: Session = get_db()
