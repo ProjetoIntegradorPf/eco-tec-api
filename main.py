@@ -39,7 +39,7 @@ app.register_blueprint(castration_blueprint, url_prefix='/api')
 app.register_blueprint(sale_blueprint, url_prefix='/api')
 app.register_blueprint(donation_blueprint, url_prefix='/api')
 app.register_blueprint(report_blueprint, url_prefix='/api')
-app.register_blueprint(cash_donation_blueprint, url_prefix='/api')
+app.register_blueprint(cash_donation_blueprint, url_prefix='/api/donations')
 app.register_blueprint(misc_expense_bp, url_prefix='/api')
 app.register_blueprint(swaggerui_blueprint)
 

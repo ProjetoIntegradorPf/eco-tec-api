@@ -8,7 +8,7 @@ from services.misc_expense_service import (
 )
 from database.database import get_db
 
-misc_expense_bp = Blueprint('misc_expense_bp', __name__, url_prefix='/api/misc-expenses')
+misc_expense_bp = Blueprint('misc_expense_bp', __name__, url_prefix='/misc-expenses')
 
 @misc_expense_bp.route('', methods=['GET'])
 def get_all_misc_expenses():
