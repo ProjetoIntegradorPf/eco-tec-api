@@ -37,8 +37,8 @@ def delete_cash_donation_repo(donation_id, db):
 
 def insert_cash_donation_in_report(donation, db):
     report = ReportModel()
-    report.donation_id = donation.id
-    report.donation = donation.quantity
+    report.cash_donation_id = donation.id
+    report.cash_donationdonation = donation.quantity
     report.date_created = donation.donation_date
     db.add(report)
     db.commit()
@@ -46,10 +46,10 @@ def insert_cash_donation_in_report(donation, db):
 def update_cash_donation_in_report(donation, db):
     report = db.query(ReportModel).filter_by(donation_id=donation.id).first()
     if report:
-        report.donation = donation.quantity
+        report.cash_donation = donation.quantity
         report.date_created = donation.donation_date
         db.commit()
 
 def delete_cash_donation_report(donation_id, db):
-    db.query(ReportModel).filter_by(donation_id=donation_id).delete()
+    db.query(ReportModel).filter_by(cash_donation_id=donation_id).delete()
     db.commit()
