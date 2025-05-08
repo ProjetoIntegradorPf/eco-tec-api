@@ -10,7 +10,7 @@ class ReportModel(Base):
     donation_id = Column(UUID(as_uuid=True))
     donation = Column(Float, default=0)
     cash_donation_id = Column(UUID(as_uuid=True))
-    cash_donationdonation = Column(Float, default=0)
+    cash_donation = Column(Float, default=0)
     sale_id = Column(UUID(as_uuid=True))
     sale_qtd_sold = Column(Float, default=0)
     sale_value = Column(Float, default=0)

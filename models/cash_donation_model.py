@@ -14,10 +14,8 @@ class CashDonationModel(Base):
     quantity = Column(Float)  # Quantidade de tampinhas doadas
     description = Column(String, index=True)  # Nome do doador
 
-
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))  # Relacionamento com a tabela 'users'
     user = relationship("UserModel", back_populates="cash_donations")  # ✅ correto
-
 
     def to_dict(self):
         return {

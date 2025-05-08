@@ -29,29 +29,30 @@ def create_cash_donation(donation_data, db, current_user_id):
     donation = create_cash_donation_in_db(donation_data, db, current_user_id)
 
     if donation:
-        insert_cash_donation_in_report,(donation, db)
+        insert_cash_donation_in_report(donation, db)
 
     return donation
 
-def get_cas_donation_by_id(donation_id, db):
+def get_cash_donation_by_id(donation_id, db):
     donation = get_cash_donation_by_id(donation_id, db)
     if not donation:
         return jsonify({"detail": "Doação em dinheiro não encontrada."}), 404
 
     return donation
 
-def update_cahs_donation(donation_id, donation_data, db, current_user_id):
+def update_cash_donation(donation_id, donation_data, db, current_user_id):
     donation = get_cash_donation_by_id(donation_id, db)
     if not donation:
         return jsonify({"detail": "Doação em dinheiro não encontrada."}), 404
 
-    if 'quantity' in donation_data and donation_data['quantity'] <= 0:
+    if (None != donation_data['quantity']) and donation_data['quantity'] <= 0:
         return jsonify({"detail": "A quantia de dinheiro doado deve ser um número positivo."}), 400
 
-    if donation_data.get('quantity') < donation.quantity:
+    if donation_data['quantity'] < donation.quantity:
         financial_reports = get_all_financial_reports(db, start_date='1977-01-01', end_date=datetime.datetime.today())
 
-        total_donated_money = sum(report.donation for report in financial_reports)
+        total_donated_money = sum(report.cash_donation for report in financial_reports)
+        total_donated_money += sum(report.donation for report in financial_reports)
         total_spent_money = sum(report.spent_value for report in financial_reports)
 
         available_money = total_donated_money - donation.quantity + donation_data['quantity']

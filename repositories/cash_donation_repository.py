@@ -38,7 +38,7 @@ def delete_cash_donation_repo(donation_id, db):
 def insert_cash_donation_in_report(donation, db):
     report = ReportModel()
     report.cash_donation_id = donation.id
-    report.cash_donationdonation = donation.quantity
+    report.cash_donation = donation.quantity
     report.date_created = donation.donation_date
     db.add(report)
     db.commit()

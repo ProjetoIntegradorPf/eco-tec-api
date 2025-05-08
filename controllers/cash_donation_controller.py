@@ -61,7 +61,7 @@ def update_donation(donationId):
     donation_data = request.get_json()
     current_user_id = get_jwt_identity()
 
-    donation = cash_donation_service.update_cahs_donation(donationId, donation_data, db, current_user_id)
+    donation = cash_donation_service.update_cash_donation(donationId, donation_data, db, current_user_id)
 
     # Verificando se a doação foi encontrada, ou se houve erro de permissão ou validação
     if isinstance(donation, tuple):
