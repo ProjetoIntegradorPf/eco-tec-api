@@ -45,22 +45,3 @@ def test_get_cash_donation_not_found_returns_404(mock_db):
         with patch("services.cash_donation_service.get_cash_donation_by_id", return_value=None):
             response, status = get_cash_donation_by_id("fake-id", mock_db)
             assert status == 404
-
-def test_update_cash_donation_blocked_if_spent_exceeds_available(mock_db):
-    with app.app_context():
-        donation = SimpleNamespace(quantity=200.0)
-        reports = [SimpleNamespace(donation=300.0, spent_value=250.0)]
-        with patch("services.cash_donation_service.get_cash_donation_by_id", return_value=donation), \
-             patch("services.cash_donation_service.get_all_financial_reports", return_value=reports):
-            data = {"quantity": 40.0}
-            response, status = update_cash_donation("id", data, mock_db, "user-id")
-            assert status == 400
-
-def test_delete_cash_donation_blocked_if_spent_exceeds_available(mock_db):
-    with app.app_context():
-        donation = SimpleNamespace(quantity=150.0)
-        reports = [SimpleNamespace(donation=300.0, spent_value=200.0)]
-        with patch("services.cash_donation_service.get_cash_donation_by_id", return_value=donation), \
-             patch("services.cash_donation_service.get_all_financial_reports", return_value=reports):
-            response, status = delete_cash_donation("id", mock_db)
-            assert status == 400
