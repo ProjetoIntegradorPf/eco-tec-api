@@ -25,13 +25,8 @@ def delete_misc_expense(expense_id, db):
     db.query(MiscExpenseModel).filter_by(id=expense_id).delete()
     db.commit()
 
-def filter_misc_expenses(filters, db):
-    query = db.query(MiscExpenseModel)
-    if filters.get('description'):
-        query = query.filter(MiscExpenseModel.description.ilike(f"%{filters['description']}%"))
-    if filters.get('expense_date'):
-        query = query.filter(MiscExpenseModel.expense_date == filters['expense_date'])
-    return query.all()
+def filter_misc_expenses(db):
+    return db.query(MiscExpenseModel).all()
 
 def insert_misc_expense_in_report(expense, db):
     report = ReportModel()

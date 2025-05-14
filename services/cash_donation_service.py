@@ -65,7 +65,7 @@ def update_cash_donation(donation_id, donation_data, db, current_user_id):
     if updated_donation:
         update_cash_donation_in_report(updated_donation, db)
 
-    return jsonify(updated_donation.to_dict()), 200
+    return updated_donation
 
 def delete_cash_donation(donation_id, db):
     donation = get_cash_donation_by_id(donation_id, db)
