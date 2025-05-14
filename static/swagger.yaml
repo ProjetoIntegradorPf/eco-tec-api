@@ -5,7 +5,7 @@ info:
   description: API para gerenciamento de usuários, doações, vendas e castrações com autenticação JWT.
   
 servers:
-  - url: http://localhost:5000/api
+  - url: https://eco-tec-api.onrender.com/api
     description: Servidor local
 
 tags:
