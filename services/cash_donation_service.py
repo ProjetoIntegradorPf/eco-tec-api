@@ -33,7 +33,7 @@ def create_cash_donation(donation_data, db, current_user_id):
 
     return donation
 
-def get_cash_donation_by_id(donation_id, db):
+def get_cash_donation_by_id_service(donation_id, db):
     donation = get_cash_donation_by_id(donation_id, db)
     if not donation:
         return jsonify({"detail": "Doação em dinheiro não encontrada."}), 404

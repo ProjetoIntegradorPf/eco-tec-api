@@ -44,7 +44,7 @@ def create_cash_donation():
 def get_cahs_donation_by_id(donationId):
     db: Session = get_db()
 
-    donation = cash_donation_service.get_cash_donation_by_id(donationId, db)
+    donation = cash_donation_service.get_cash_donation_by_id_service(donationId, db)
 
     # Verificando se a doação foi encontrada ou se houve erro de permissão
     if isinstance(donation, tuple):
