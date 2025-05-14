@@ -9,7 +9,8 @@ def create_cash_donation_in_db(donation_data, db, current_user_id):
     return donation
 
 def get_cash_donation_by_id(donation_id, db):
-    return db.query(CashDonationModel).filter_by(id=donation_id).get()
+    return db.query(CashDonationModel).get(donation_id)
+
 def update_cash_donation_in_db(donation_id, donation_data, db, current_user_id):
     donation = get_cash_donation_by_id(donation_id, db)
     
