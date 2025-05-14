@@ -41,6 +41,7 @@ def create_castration(castration_data, db, current_user_id):
 
     for form in form_data:
        money_spent += form.sale_value
+       money_spent += form.cash_donation
        money_raised += form.castration_value
 
     money = money_spent - money_raised
@@ -88,6 +89,7 @@ def update_castration(castrationId, castration_data, db, current_user_id):
 
         for form in form_data:
             money_spent += form.sale_value
+            money_spent += form.cash_donation
             money_raised += form.castration_value
 
         money = (money_spent - money_raised)

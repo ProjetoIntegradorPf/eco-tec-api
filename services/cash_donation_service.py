@@ -52,7 +52,7 @@ def update_cash_donation(donation_id, donation_data, db, current_user_id):
         financial_reports = get_all_financial_reports(db, start_date='1977-01-01', end_date=datetime.datetime.today())
 
         total_donated_money = sum(report.cash_donation for report in financial_reports)
-        total_donated_money += sum(report.donation for report in financial_reports)
+        total_donated_money += sum(report.sale_value for report in financial_reports)
         total_spent_money = sum(report.spent_value for report in financial_reports)
 
         available_money = total_donated_money - donation.quantity + donation_data['quantity']
@@ -74,7 +74,7 @@ def delete_cash_donation(donation_id, db):
 
     financial_reports = get_all_financial_reports(db, start_date='1977-01-01', end_date=datetime.datetime.today())
 
-    total_donated_money = sum(report.donation for report in financial_reports)
+    total_donated_money = sum(report.sale_value for report in financial_reports)
     total_donated_money += sum(report.cash_donation for report in financial_reports)
     total_spent_money = sum(report.spent_value for report in financial_reports)
 
